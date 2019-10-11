@@ -13,7 +13,7 @@ def cover(root):
     frame.place(width=600, height=400)
 
     # draws a background
-    background = PhotoImage(file='images/background.png')
+    background = PhotoImage(file='images/cover.png')
     background_label = Label(frame, image=background)
     background_label.image = background
     background_label.place(x=0, y=0)
