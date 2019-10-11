@@ -1,13 +1,13 @@
-###Cx1003 Introduction To Computational Thinking Mini Project
-#####FS1 Bian Hengwei, Bryan Lim, Cheng Yu Feng
+Cx1003 Introduction To Computational Thinking Mini Project
+FS1 Bian Hengwei, Bryan Lim, Cheng Yu Feng
 
-#####Project Name:
-######Real-time Canteen Information System
+Project Name:
+Real-time Canteen Information System
 
-#####Objectives:
-######A. Store and display stall information
-######B. Store and display stall menus
-######C. Display stall information and menus based on current system date and time
-######D. Display stall information and menus based on user defined date and time
-######E. Calculate estimated waiting time for the stall by asking user to enter the number of people in the queue
-######F. Allow to check the operating hours for all stalls
+Objectives:
+A. Store and display stall information
+B. Store and display stall menus
+C. Display stall information and menus based on current system date and time
+D. Display stall information and menus based on user defined date and time
+E. Calculate estimated waiting time for the stall by asking user to enter the number of people in the queue
+F. Allow to check the operating hours for all stalls
