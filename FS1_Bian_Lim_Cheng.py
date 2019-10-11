@@ -5,7 +5,6 @@ from tkinter import *
 def cover(frame):
     frame.place(relheight=600, relwidth=400)
     background = PhotoImage(file='images/background.png')
-    background_label = Label(frame, image=background)
 
 
 # main func that runs the whole app
