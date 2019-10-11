@@ -6,7 +6,6 @@ def cover(frame):
     frame.place(relheight=600, relwidth=400)
     background = PhotoImage(file='images/background.png')
     background_label = Label(frame, image=background)
-    background_label.place(x=0, y=0)
 
 
 # main func that runs the whole app
