@@ -58,6 +58,12 @@ def page_template(root, width, height):
     canvas = Canvas(root)
     canvas.place(width=width, height=height)
 
+    # draws the background
+    background = PhotoImage(file='images/cover.png')
+    background_label = Label(canvas, image=background)
+    background_label.image = background
+    background_label.place(x=width // 2, y=height // 2, anchor=CENTER)
+
     # a button with common configs edited
     btn = Button(canvas, text='BACK BUTTON', fg='green', bg="#%02x%02x%02x" % (50, 100, 200),
                  font='Times 50 bold italic underline', command=lambda: cover(root, width, height))
