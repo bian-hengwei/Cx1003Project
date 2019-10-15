@@ -19,8 +19,14 @@ def main(width=600, height=400):
     root.geometry('600x400')
     root.resizable(False, False)
 
+    # an object that stores images
+    class Struct:
+        pass
+    data = Struct()
+    initialize(data)
+
     # draws the cover
-    cover(root, width, height)
+    cover(root, data)
 
     # launches the app and block until window is closed
     root.mainloop()

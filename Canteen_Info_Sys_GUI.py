@@ -13,56 +13,124 @@ from tkinter import *
 from Canteen_Info_Sys import *
 
 
+# initializes data that MUST be initialized in the main() function
+def initialize(data):
+    data.width, data.height = 600, 400
+    data.cover = PhotoImage(file='images/cover.png')
+
+
 # draws the cover
-def cover(root, width, height):
+def cover(root, data):
 
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
 
     # creates a new canvas for the cover page
-    canvas = Canvas(root, width=width, height=height)
+    canvas = Canvas(root, width=data.width, height=data.height)
+    canvas.configure(highlightthickness=0)
     canvas.pack()
 
     # draws a background image
-    background = PhotoImage(file='images/cover.png')
-    background_label = Label(canvas, image=background)
-    background_label.image = background
-    background_label.place(x=width // 2, y=height // 2, anchor=CENTER)
+    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
 
     # a button that directs to the select store window
-    select_store_button = Button(canvas, text='SELECT STORE',
-                                 command=lambda: select_store(root, width, height))
-    select_store_button.place(x=width // 2, y=height * 2 // 3, anchor=CENTER)
+    select_stall_button = Button(canvas, text='SELECT STORE',
+                                 command=lambda: select_stall(root, data))
+    select_stall_button.place(x=data.width // 2, y=data.height * 2 // 3, anchor=CENTER)
 
-    # a text label
-    title = Label(canvas, text='North Spine Canteen\nInformation System', font='Noteworthy 50 bold italic')
-    title.place(x=width // 2, y=height // 3, anchor=CENTER)
+    # text
+    canvas.create_text(data.width // 2, data.height // 3, text='North Spine Canteen\nInformation System',
+                       font='Noteworthy 50 bold italic', fill='white')
 
 
 # draws a canvas that shows the stalls list
-def select_store(root, width, height):
+def select_stall(root, data):
 
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
 
     # creates a new canvas
-    canvas = Canvas(root)
-    canvas.place(width=width, height=height)
+    canvas = Canvas(root, width=data.width, height=data.height)
+    canvas.configure(highlightthickness=0)
+    canvas.pack()
 
-    # test buttons
-    btn = Button(canvas, text='Back', command=lambda: cover(root, width, height))
-    btn.place(x=width // 2, y=height // 4, anchor=CENTER)
-    btn2 = Button(canvas, text='Destroy', command=lambda: root.destroy())
-    btn2.place(x=width // 2, y=height // 2, anchor=CENTER)
-    btn3 = Button(canvas, text='Template', command=lambda: page_template(root, width, height))
-    btn3.place(x=width // 2, y=height * 3 // 4, anchor=CENTER)
+    # draws the background
+    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
+
+    # reads the stalls list
+    stalls_list = get_stalls()
+    stalls_count = len(stalls_list)
+
+    # builds the buttons
+    margin_height = data.height // (stalls_count * 2 + 1)
+    button_height = margin_height * 2
+    margin_width = 50
+    button_width = 225
+
+    # draws and places the buttons
+    for stall_name in stalls_list:
+        stall_index = stalls_list.index(stall_name)
+        if stall_index >= stalls_count // 2:
+            x = margin_width * 2 + button_width
+            y_index = stall_index - stalls_count // 2
+        else:
+            x = margin_width
+            y_index = stall_index
+        y = (y_index + 1) * margin_height + y_index * button_height
+        stall = Button(canvas, text=stall_name)
+        stall.place(x=x, y=y, width=button_width, height=button_height, anchor=NW)
+        stall.config(command=lambda: display_stall(root, data, stall['text']))
+
+    # a back button
+    back_button = Button(canvas, text='Back', command=lambda: cover(root, data))
+    back_button.place(x=0, y=data.height, anchor=SW)
+
+
+def display_stall(root, data, stall_name):
+
+    # clears the root
+    for canvas in root.winfo_children():
+        canvas.destroy()
+
+    # creates a new canvas
+    canvas = Canvas(root, width=data.width, height=data.height)
+    canvas.configure(highlightthickness=0)
+    canvas.pack()
+
+    # draws the background
+    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
+
+    # reads the operating hours and the menu
+    stall_info = get_info(stall_name)
+    if isinstance(stall_info, str):
+        error(root, data, stall_info)
+        return
+
+    # displays the stall name and the operating hour
+    canvas.create_text(50, 50, text=stall_name, font='40')
+
+
+# error page
+def error(root, data, error_message):
+
+    # clears the root
+    for canvas in root.winfo_children():
+        canvas.destroy()
+
+    # creates a new empty canvas with the same width and height
+    canvas = Canvas(root, width=data.width, height=data.height)
+    canvas.configure(highlightthickness=0)
+    canvas.pack()
+
+    Button(canvas, text=error_message + '\n\nTernimate', command=root.destroy).place(
+        x=data.width // 2, y=data.height //2, anchor=CENTER)
 
 
 # this is a page template
 # copy and paste when creating new pages to save time
-def page_template(root, width, height):
+def page_template(root, data, width, height):
 
     # clears the root
     for canvas in root.winfo_children():
@@ -70,7 +138,8 @@ def page_template(root, width, height):
 
     # creates a new empty canvas with the same width and height
     canvas = Canvas(root)
-    canvas.place(width=width, height=height)
+    canvas.configure(highlightthickness=0)
+    canvas.pack()
 
     # draws the background
     background = PhotoImage(file='images/cover.png')
@@ -80,7 +149,7 @@ def page_template(root, width, height):
 
     # a button with common configs edited
     btn = Button(canvas, text='BACK BUTTON', fg='green', bg="#%02x%02x%02x" % (50, 100, 200),
-                 font='Times 50 bold italic underline', command=lambda: cover(root, width, height))
+                 font='Times 50 bold italic underline', command=lambda: cover(root, data))
     btn.place(x=width // 2, y=height // 4, anchor=CENTER)
 
     # a text label that shows the content entered in the entry
@@ -100,5 +169,5 @@ def page_template(root, width, height):
     btn_enter.place(x=width // 2, y=height * 3 // 4 + 20, anchor=CENTER, height=20)
 
     # returns to the cover
-    btn_back = Button(canvas, text='Back', command=lambda: cover(root, width, height))
-    btn_back.place(x=0, y=height, anchor=SW)
+    btn_back = Button(canvas, text='Back', command=lambda: cover(root, data))
+    btn_back.place(x=0, y=data.height, anchor=SW)
