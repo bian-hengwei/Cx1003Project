@@ -37,11 +37,12 @@ def cover(root, data):
     # a button that directs to the select store window
     select_stall_button = Button(canvas, text='SELECT STORE',
                                  command=lambda: select_stall(root, data))
-    select_stall_button.place(x=data.width // 2, y=data.height * 2 // 3, anchor=CENTER)
+    select_stall_button.place(x=data.width // 2, y=data.height * 2 // 3,
+                              width=150, height=80, anchor=CENTER)
 
     # text
     canvas.create_text(data.width // 2, data.height // 3, text='North Spine Canteen\nInformation System',
-                       font='Noteworthy 50 bold italic', fill='white')
+                       font='Noteworthy 40 bold italic', fill='black')
 
 
 # draws a canvas that shows the stalls list
@@ -68,6 +69,7 @@ def select_stall(root, data):
     button_height = margin_height * 2
     margin_width = 50
     button_width = 225
+    x_list, y_list = [], []
 
     # draws and places the buttons
     for stall_name in stalls_list:
@@ -79,9 +81,8 @@ def select_stall(root, data):
             x = margin_width
             y_index = stall_index
         y = (y_index + 1) * margin_height + y_index * button_height
-        stall = Button(canvas, text=stall_name)
+        stall = Button(canvas, text=stall_name, command=lambda name=stall_name: display_stall(root, data, name))
         stall.place(x=x, y=y, width=button_width, height=button_height, anchor=NW)
-        stall.config(command=lambda: display_stall(root, data, stall['text']))
 
     # a back button
     back_button = Button(canvas, text='Back', command=lambda: cover(root, data))
