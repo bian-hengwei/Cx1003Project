@@ -69,7 +69,6 @@ def select_stall(root, data):
     button_height = margin_height * 2
     margin_width = 50
     button_width = 225
-    x_list, y_list = [], []
 
     # draws and places the buttons
     for stall_name in stalls_list:

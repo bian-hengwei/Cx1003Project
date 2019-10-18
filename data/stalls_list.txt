@@ -4,5 +4,5 @@ Stall Three
 Stall Four
 Stall Five
 Stall Six
-Stall Seven
+MALA
 Stall Eight
