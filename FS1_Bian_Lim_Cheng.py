@@ -16,7 +16,7 @@ def main(width=600, height=400):
     # creates a root obj and its canvas
     root = Tk()
     root.title('North Spine Canteen Information System')
-    root.geometry('600x400')
+    root.geometry(str(width) + 'x' + str(height))
     root.resizable(False, False)
 
     # an object that stores images
@@ -24,6 +24,7 @@ def main(width=600, height=400):
         pass
     data = Struct()
     initialize(data)
+    data.width, data.height = width, height
 
     # draws the cover
     cover(root, data)

@@ -15,7 +15,6 @@ from Canteen_Info_Sys import *
 
 # initializes data that MUST be initialized in the main() function
 def initialize(data):
-    data.width, data.height = 600, 400
     data.cover = PhotoImage(file='images/cover.png')
 
 
