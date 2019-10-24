@@ -11,7 +11,7 @@ from Canteen_Info_Sys_GUI import *
 
 
 # main func that runs the whole app
-def main(width=600, height=400):
+def main(width=1000, height=800):
 
     # creates a root obj and its canvas
     root = Tk()
