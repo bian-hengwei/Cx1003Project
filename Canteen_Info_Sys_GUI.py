@@ -18,6 +18,8 @@ from Canteen_Info_Sys import *
 # initializes data that MUST be initialized in the main() function
 def initialize(data):
     data.cover = PhotoImage(file='images/cover.png')
+    data.time = Time()
+    data.time.get_current_time()
 
 
 # draws the cover
@@ -33,16 +35,21 @@ def cover(root, data):
 
     # draws a background image
     canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
+    canvas.create_rectangle(0, 0, data.width, data.height, fill='white')
+
+    # shows current time
+    canvas.create_text(data.width // 2, data.height // 6, text=data.time.to_string(),
+                       font='Times 30 bold')
+
+    # title text
+    canvas.create_text(data.width // 4, data.height // 2, text='North Spine\nCanteen\nInformation\nSystem',
+                       font='Noteworthy 60 bold italic', fill='black')
 
     # a button that directs to the select store window
-    select_stall_button = Button(canvas, text='SELECT STORE',
+    select_stall_button = Button(canvas, text='SELECT\nSTORE', font='Times 30 bold',
                                  command=lambda: select_stall(root, data))
-    select_stall_button.place(x=data.width // 2, y=data.height * 2 // 3,
-                              width=150, height=80, anchor=CENTER)
-
-    # text
-    canvas.create_text(data.width // 2, data.height // 3, text='North Spine Canteen\nInformation System',
-                       font='Noteworthy 40 bold italic', fill='black')
+    select_stall_button.place(x=data.width * 3 // 4, y=data.height // 3,
+                              width=200, height=160, anchor=CENTER)
 
 
 # draws a canvas that shows the stalls list
@@ -56,9 +63,6 @@ def select_stall(root, data):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
-    # draws the background
-    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
-
     # reads the stalls list
     stalls_list = get_stalls()
     stalls_count = len(stalls_list)
@@ -66,8 +70,8 @@ def select_stall(root, data):
     # builds the buttons
     margin_height = data.height // (stalls_count * 2 + 1)
     button_height = margin_height * 2
-    margin_width = 50
-    button_width = 225
+    margin_width = data.width // 7
+    button_width = margin_width * 2
 
     # draws and places the buttons
     for stall_name in stalls_list:
@@ -121,8 +125,18 @@ def error(root, data, error_message):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
+
     Button(canvas, text=error_message + '\n\nTernimate', command=root.destroy).place(
         x=data.width // 2, y=data.height // 2, anchor=CENTER)
+
+    canvas.create_text(data.width // 2, data.height // 4, text=error_message, font='Times 40')
+
+    Button(canvas, text='Terminate', font='Times 40', command=root.destroy).place(
+        x=data.width // 2, y=data.height // 2, anchor=CENTER)
+
+    Button(canvas, text='Restart', font='Times 40', command=lambda: cover(root, data)).place(
+        x=data.width // 2, y=data.height * 3 // 4, anchor=CENTER)
+
 
 
 # this is a page template

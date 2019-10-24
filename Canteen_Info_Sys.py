@@ -8,10 +8,11 @@ Basic algorithms that reads txt files and user inputs
 to meets the project objectives
 """
 
+from datetime import *
+
 
 # returns the stalls list stored in stalls_list.txt
 def get_stalls():
-
     # opens the stalls list
     # prints an error message if the file is not found
     try:
@@ -28,7 +29,6 @@ def get_stalls():
 
 # return the information of a specific store
 def get_info(stall_name):
-
     # opens the info file
     # prints an error message if the file is not found
     try:
@@ -52,3 +52,32 @@ def get_info(stall_name):
 # returns the available menu
 def get_current_menu(menu_list, current_time):
     pass
+
+
+class Time(object):
+
+    def __init__(self):
+        self.day_of_week = None
+        self.date = None
+        self.month = None
+        self.year = None
+        self.hour = None
+        self.minute = None
+
+    def get_current_time(self):
+        self.day_of_week = datetime.now().weekday()
+        self.date = datetime.now().strftime('%d')
+        self.month = datetime.now().strftime('%m')
+        self.year = datetime.now().strftime('%Y')
+        self.hour = datetime.now().strftime('%H')
+        self.minute = datetime.now().strftime('%M')
+
+    def to_string(self):
+        time_string = ''
+
+        time_string += '{0}, {1} {2}'.format(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][self.day_of_week],
+                                             self.date, ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                                                         'Sep', 'Oct', 'Nov', 'Dec'][int(self.month)])
+        time_string += ' ' + self.year + ', ' + self.hour + ':' + self.minute
+
+        return time_string
