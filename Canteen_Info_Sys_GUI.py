@@ -10,6 +10,8 @@ Built with Tkinter
 """
 
 from tkinter import *
+from tkinter import Button
+
 from Canteen_Info_Sys import *
 
 
@@ -20,7 +22,6 @@ def initialize(data):
 
 # draws the cover
 def cover(root, data):
-
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -46,7 +47,6 @@ def cover(root, data):
 
 # draws a canvas that shows the stalls list
 def select_stall(root, data):
-
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -88,7 +88,6 @@ def select_stall(root, data):
 
 
 def display_stall(root, data, stall_name):
-
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -113,7 +112,6 @@ def display_stall(root, data, stall_name):
 
 # error page
 def error(root, data, error_message):
-
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -124,13 +122,12 @@ def error(root, data, error_message):
     canvas.pack()
 
     Button(canvas, text=error_message + '\n\nTernimate', command=root.destroy).place(
-        x=data.width // 2, y=data.height //2, anchor=CENTER)
+        x=data.width // 2, y=data.height // 2, anchor=CENTER)
 
 
 # this is a page template
 # copy and paste when creating new pages to save time
 def page_template(root, data):
-
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -167,3 +164,94 @@ def page_template(root, data):
     # returns to the cover
     btn_back = Button(canvas, text='Back', command=lambda: cover(root, data))
     btn_back.place(x=0, y=data.height, anchor=SW)
+
+
+def display_stall(root, data, stall_name):
+    # clears the root
+    for canvas in root.winfo_children():
+        canvas.destroy()
+
+    # creates a new canvas
+    canvas = Canvas(root, width=data.width, height=data.height)
+    canvas.configure(highlightthickness=0)
+    canvas.pack()
+
+    # draws the background
+    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
+
+    # stall name
+    canvas.create_text(data.width // 2, 50, text=stall_name, font=('Arial', 40))
+
+    # create the buttons for menu, queue time, operating hours (three funtions are under tis one)
+    menu_btn = Button(root, text='Menu', width=12, height=2, command=lambda: menu(root))
+    menu_btn.place(x=30, y=100, anchor=NW)
+
+    queue_btn = Button(root, text='Queue time', width=12, height=2, command=lambda: queue_time(root))
+    queue_btn.place(x=30, y=150, anchor=NW)
+
+    operating_btn = Button(root, text='Operating hours', width=12, height=2, command=lambda: operating_hours(root))
+    operating_btn.place(x=30, y=200, anchor=NW)
+
+    # return to select store
+    back_button = Button(canvas, text='Back', command=lambda: select_stall(root, data))
+    back_button.place(x=0, y=data.height, anchor=SW)
+
+
+def menu(root):
+    # cover two canvas on the page
+    canvas_m1 = Canvas(root, bg='skyblue1', width=200, height=250)
+    canvas_m1.place(x=150, y=100, anchor=NW)
+
+    canvas_m2 = Canvas(root, bg='skyblue1', width=200, height=250)
+    canvas_m2.place(x=350, y=100, anchor=NW)
+
+    # read menu.txt and display menu
+    menu_content = Label(root, text='closed', font=('Arial,20'))
+    menu_content.place(x=450, y=200, anchor=CENTER)
+
+
+def queue_time(root):
+
+    # function for showing queue time
+    def show_queue_time():
+        # get the value from the entry below
+        var = queue_enter.get()
+
+        # calculate the queue time(should be changed for each stall)
+        var_int = int(var)
+        var_int = var_int // 2
+        var_str = str(var_int)
+
+        # create a label to show the queuing time message
+        show_var = 'Estimated queuing time is: ' + var_str + ' minutes'
+        queue_result = Label(root, bg='skyblue1', text=show_var, width=30, height=3, font=('Arial', 20))
+        queue_result.place(x=350, y=290, anchor=CENTER)
+
+    # canvas for queue time
+    canvas_q = Canvas(root, bg='skyblue1', width=400, height=250)
+    canvas_q.place(x=150, y=100, anchor=NW)
+
+    # entering message
+    queue_text = Label(root, bg='skyblue1', text="Please enter the number of pax queuing", font=('Arial', 20))
+    queue_text.place(x=350, y=160, anchor=CENTER)
+
+    # the entry for the number of queuing people
+    queue_enter = Entry(root, show=None)
+    queue_enter.place(x=310, y=225, anchor=CENTER)
+
+    # a button for calculate the time
+    calcubtn = Button(root, text='Caculate', width=7, height=2, command=show_queue_time)
+    calcubtn.place(x=450, y=225, anchor=CENTER)
+
+
+def operating_hours(root):
+    # two canvas for operating hours
+    canvas_op1 = Canvas(root, bg='skyblue1', width=200, height=250)
+    canvas_op1.place(x=150, y=100, anchor=NW)
+
+    canvas_op2 = Canvas(root, bg='skyblue1', width=200, height=250)
+    canvas_op2.place(x=350, y=100, anchor=NW)
+
+    # label for open or close (do we need this????????????)
+    oph = Label(root, text='Wednesday: 10am~10pm', font=('Arial,20'))
+    oph.place(x=250, y=200, anchor=CENTER)
