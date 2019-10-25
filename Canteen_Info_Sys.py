@@ -54,8 +54,10 @@ def get_current_menu(menu_list, current_time):
     pass
 
 
-class Time(object):
+# class Time that records the time
+class Time:
 
+    # initialize an empty Time object
     def __init__(self):
         self.day_of_week = None
         self.date = None
@@ -63,7 +65,10 @@ class Time(object):
         self.year = None
         self.hour = None
         self.minute = None
+        self.months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        self.days_of_week = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
+    # set the time instances to current time value
     def get_current_time(self):
         self.day_of_week = datetime.now().weekday()
         self.date = datetime.now().strftime('%d')
@@ -72,12 +77,20 @@ class Time(object):
         self.hour = datetime.now().strftime('%H')
         self.minute = datetime.now().strftime('%M')
 
+    # return a string representation of any Time object
     def to_string(self):
         time_string = ''
 
-        time_string += '{0}, {1} {2}'.format(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][self.day_of_week],
-                                             self.date, ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
-                                                         'Sep', 'Oct', 'Nov', 'Dec'][int(self.month)])
+        time_string += self.days_of_week[self.day_of_week] + ', '
+        time_string += self.date + ' ' + self.months[int(self.month)]
         time_string += ' ' + self.year + ', ' + self.hour + ':' + self.minute
 
         return time_string
+
+    def change_date(self, time_string):
+        self.date = time_string[0:2]
+        self.month = str(self.months.index(time_string[3:6]))
+        self.year = time_string[7:11]
+        self.hour = time_string[13:15]
+        self.minute = time_string[16:]
+        self.day_of_week = datetime(int(self.year), int(self.month), int(self.date)).weekday()
