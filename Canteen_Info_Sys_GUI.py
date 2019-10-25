@@ -38,7 +38,7 @@ def cover(root, data):
 
     # shows current time
     canvas.create_text(data.width // 2, data.height // 6, text=data.time.to_string(),
-                       font='Times 30 bold')
+                       font='Times 40 bold', fill='white')
 
     # title text
     canvas.create_text(data.width // 4, data.height // 2, text='North Spine\nCanteen\nInformation\nSystem',
