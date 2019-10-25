@@ -37,8 +37,8 @@ def cover(root, data):
     canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
 
     # shows current time
-    canvas.create_text(data.width // 2, data.height // 6, text=data.time.to_string(),
-                       font='Times 40 bold', fill='white')
+    canvas.create_text(data.width // 2, data.height * 9 // 10, text=data.time.to_string(),
+                       font='Times 25 bold', fill='white')
 
     # title text
     canvas.create_text(data.width // 4, data.height // 2, text='North Spine\nCanteen\nInformation\nSystem',
@@ -46,7 +46,7 @@ def cover(root, data):
 
     # a button that directs to the select store window
     select_stall_button = Button(canvas, text='SELECT\nSTORE', font='Times 30 bold',
-                                 command=lambda: select_stall(root, data))
+                                 command=lambda: change_date(root, data, data.time.get_current_time().to_string()[5:]))
     select_stall_button.place(x=data.width * 3 // 4, y=data.height // 3,
                               width=300, height=100, anchor=CENTER)
 
@@ -82,9 +82,8 @@ def select_stall(root, data):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
-    # shows current time
-    canvas.create_text(data.width // 2, data.height // 6, text=data.time.to_string(),
-                       font='Times 30 bold')
+    # draws a background image
+    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
 
     # reads the stalls list
     stalls_list = get_stalls()
@@ -106,16 +105,21 @@ def select_stall(root, data):
             x = margin_width
             y_index = stall_index
         y = (y_index + 1) * margin_height + y_index * button_height
-        stall = Button(canvas, text=stall_name, command=lambda name=stall_name: menu(root, data, name))
+        stall = Button(canvas, text=stall_name, font='Times 30 bold',
+                       command=lambda name=stall_name: menu(root, data, name))
         stall.place(x=x, y=y, width=button_width, height=button_height, anchor=NW)
 
     # a back button
-    back_button = Button(canvas, text='Back', command=lambda: cover(root, data))
-    back_button.place(x=0, y=data.height, anchor=SW)
+    back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: cover(root, data))
+    back_button.place(x=0, y=data.height, width=100, height=80, anchor=SW)
+
+    # shows current time
+    canvas.create_text(data.width // 2, data.height * 9 // 10, text=data.time.to_string(),
+                       font='Times 25 bold', fill='white')
 
 
 # error page
-def error(root, data, error_message):
+def error(root, data, error_message='ERROR'):
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -124,9 +128,6 @@ def error(root, data, error_message):
     canvas = Canvas(root, width=data.width, height=data.height)
     canvas.configure(highlightthickness=0)
     canvas.pack()
-
-    Button(canvas, text=error_message + '\n\nTerminate', command=root.destroy).place(
-        x=data.width // 2, y=data.height // 2, anchor=CENTER)
 
     canvas.create_text(data.width // 2, data.height // 4, text=error_message, font='Times 40')
 
@@ -201,7 +202,6 @@ def menu(root, data, stall_name):
 
     canvas.create_rectangle(20, 20, 880, 680, fill='gray')
 
-
     queue_btn = Button(root, text='Queue time', width=12, height=2, command=lambda: queue_time(root))
     queue_btn.place(x=30, y=150, anchor=NW)
 
@@ -243,13 +243,11 @@ def queue_time(root):
     queue_enter.place(x=310, y=225, anchor=CENTER)
 
     # a button for calculate the time
-    calcubtn = Button(root, text='Calculate', width=7, height=2, command=show_queue_time)
-    calcubtn.place(x=450, y=225, anchor=CENTER)
+    calculate_btn = Button(root, text='Calculate', width=7, height=2, command=show_queue_time)
+    calculate_btn.place(x=450, y=225, anchor=CENTER)
 
 
 def operating_hours(root):
-    for canvas in root.winfo_children():
-        canvas.destroy()
 
     # two canvas for operating hours
     canvas_op1 = Canvas(root, bg='skyblue1', width=200, height=250)
@@ -258,6 +256,6 @@ def operating_hours(root):
     canvas_op2 = Canvas(root, bg='skyblue1', width=200, height=250)
     canvas_op2.place(x=350, y=100, anchor=NW)
 
-    # label for open or close (do we need this????????????)
+    # label for open or close
     oph = Label(root, text='Wednesday: 10am~10pm', font='Arial,20')
     oph.place(x=250, y=200, anchor=CENTER)
