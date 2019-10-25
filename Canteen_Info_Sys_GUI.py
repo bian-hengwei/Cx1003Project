@@ -35,7 +35,6 @@ def cover(root, data):
 
     # draws a background image
     canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
-    canvas.create_rectangle(0, 0, data.width, data.height, fill='white')
 
     # shows current time
     canvas.create_text(data.width // 2, data.height // 6, text=data.time.to_string(),
@@ -43,13 +42,13 @@ def cover(root, data):
 
     # title text
     canvas.create_text(data.width // 4, data.height // 2, text='North Spine\nCanteen\nInformation\nSystem',
-                       font='Noteworthy 60 bold italic', fill='black')
+                       font='Noteworthy 60 bold italic', fill='white', justify='center')
 
     # a button that directs to the select store window
     select_stall_button = Button(canvas, text='SELECT\nSTORE', font='Times 30 bold',
                                  command=lambda: select_stall(root, data))
     select_stall_button.place(x=data.width * 3 // 4, y=data.height // 3,
-                              width=300, height=150, anchor=CENTER)
+                              width=300, height=100, anchor=CENTER)
 
     # Change date button
     change_date_button = Button(canvas, text='View Stores By:\n', font='Times 30 bold',
@@ -59,7 +58,12 @@ def cover(root, data):
     # entry widgets that allows time input
     time_string = StringVar(canvas, data.time.to_string()[5:])
     time_entry = Entry(canvas, textvariable=time_string, font='Times 25 bold', justify='center')
-    time_entry.place(x=data.width * 3 // 4, y=data.height // 2 + 50, width=300, height=50, anchor=CENTER)
+    time_entry.place(x=data.width * 3 // 4, y=data.height // 2 + 30, width=300, height=50, anchor=CENTER)
+
+    # exit button
+    Button(canvas, text='Exit', font='Times 30 bold',
+           command=root.destroy).place(x=data.width * 3 // 4,
+                                       y=data.height * 2 // 3, width=300, height=100, anchor=CENTER)
 
 
 def change_date(root, data, time_string):
@@ -243,12 +247,12 @@ def queue_time(root):
     queue_text.place(x=350, y=160, anchor=CENTER)
 
     # the entry for the number of queuing people
-    queue_enter = Entry(root, show=None)
+    queue_enter = Entry(root)
     queue_enter.place(x=310, y=225, anchor=CENTER)
 
     # a button for calculate the time
-    calcubtn = Button(root, text='Calculate', width=7, height=2, command=show_queue_time)
-    calcubtn.place(x=450, y=225, anchor=CENTER)
+    calculate_btn = Button(root, text='Calculate', width=7, height=2, command=show_queue_time)
+    calculate_btn.place(x=450, y=225, anchor=CENTER)
 
 
 def operating_hours(root):
