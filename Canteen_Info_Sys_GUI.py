@@ -189,6 +189,25 @@ def display_stall(root, data, stall_name):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
+    # create the background of the content
+    radius = 50
+    canvas.create_rectangle(data.width // 8, data.height * 2 // 6 - 30, data.width * 7 // 8, data.height * 5 // 6 - 30,
+                            fill='gray64',outline='gray64')
+    canvas.create_rectangle(data.width // 8 + radius, data.height * 2 // 6 - 30 - radius, data.width * 7 // 8 - radius,
+                            data.height * 5 // 6 - 30 + radius, fill='gray64', outline='gray64')
+    canvas.create_arc(data.width * 7 // 8 - radius * 2, data.height * 2 // 6 - 30 - radius, data.width * 7 // 8,
+                      data.height * 2 // 6 - 30 + radius
+                      , start=0, extent=90, fill='gray64', outline='gray64')
+    canvas.create_arc(data.width // 8, data.height * 2 // 6 - 30 - radius, data.width // 8 + radius * 2,
+                      data.height * 2 // 6 - 30 + radius
+                      , start=90, extent=90, fill='gray64', outline='gray64')
+    canvas.create_arc(data.width // 8, data.height * 5 // 6 - 30 - radius, data.width // 8 + radius * 2,
+                      data.height * 5 // 6 - 30 + radius
+                      , start=180, extent=90, fill='gray64', outline='gray64')
+    canvas.create_arc(data.width * 7 // 8 - radius * 2, data.height * 5 // 6 - 30 - radius, data.width * 7 // 8,
+                      data.height * 5 // 6 - 30 + radius
+                      , start=270, extent=90, fill='gray64', outline='gray64')
+
     # menu button
     menu_button = Button(canvas, text='Menu', font='Times 15', command=lambda: menu(root, data, stall_name))
     menu_button.place(x=data.width // 3, y=data.height // 15, width=data.width // 10,
@@ -205,7 +224,7 @@ def display_stall(root, data, stall_name):
                                  height=data.height // 15, anchor=CENTER)
 
     # stall name
-    canvas.create_text(data.width // 2, data.height // 7, text=stall_name, font=('Arial', 40))
+    canvas.create_text(data.width // 2, data.height // 7 + 15, text=stall_name, font=('Arial 60'))
 
     # a back button
     back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: select_stall(root, data))
@@ -215,13 +234,14 @@ def display_stall(root, data, stall_name):
 
 
 def menu(root, data, stall_name):
-
     canvas = display_stall(root, data, stall_name)
 
+    # have to read the menu
     canvas.create_text(500, 400, text='MENU')
 
 
 def queue_time(root, data, stall_name):
+    canvas = display_stall(root, data, stall_name)
 
     # function for showing queue time
     def show_queue_time():
@@ -235,32 +255,22 @@ def queue_time(root, data, stall_name):
 
         # create a label to show the queuing time message
         show_var = 'Estimated queuing time is: ' + var_str + ' minutes'
-        queue_result = Label(root, bg='skyblue1', text=show_var, width=30, height=3, font=('Arial', 20))
-        queue_result.place(x=350, y=290, anchor=CENTER)
-
-    # canvas for queue time
-    canvas_q = Canvas(root, bg='skyblue1', width=400, height=250)
-    canvas_q.place(x=150, y=100, anchor=NW)
+        canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 30')
 
     # entering message
-    queue_text = Label(root, bg='skyblue1', text="Please enter the number of pax queuing", font=('Arial', 20))
-    queue_text.place(x=350, y=160, anchor=CENTER)
+    canvas.create_text(data.width // 2 , data.height // 3 + 40, text='Please enter the number of pax queuing:'
+                       , font='Arial 30')
 
     # the entry for the number of queuing people
     queue_enter = Entry(root, show=None)
-    queue_enter.place(x=310, y=225, anchor=CENTER)
+    queue_enter.place(x=data.width // 2 - 30, y=data.height // 2 + 10, anchor=CENTER)
 
     # a button for calculate the time
     calculate_btn = Button(root, text='Calculate', width=7, height=2, command=show_queue_time)
-    calculate_btn.place(x=450, y=225, anchor=CENTER)
-
-    canvas = display_stall(root, data, stall_name)
-
-    canvas.create_text(500, 400, text='QUEUE')
+    calculate_btn.place(x=data.width // 2 + 105, y=data.height // 2 + 10, anchor=CENTER)
 
 
 def operating_hours(root, data, stall_name):
-
     canvas = display_stall(root, data, stall_name)
-
+    # have to read the operating hours
     canvas.create_text(500, 400, text='O HOUR')
