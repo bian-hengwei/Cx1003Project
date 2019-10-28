@@ -76,6 +76,7 @@ class Time:
         self.year = datetime.now().strftime('%Y')
         self.hour = datetime.now().strftime('%H')
         self.minute = datetime.now().strftime('%M')
+        return self
 
     # return a string representation of any Time object
     def to_string(self):

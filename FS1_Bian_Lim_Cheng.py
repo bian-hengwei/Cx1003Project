@@ -9,7 +9,6 @@ Main file that runs the whole app
 
 from Canteen_Info_Sys_GUI import *
 
-
 # main func that runs the whole app
 def main(width=1000, height=800):
 
