@@ -5,7 +5,7 @@ FS1 Bian Hengwei
 FS1 Bryan Lim
 FS1 Cheng Yu Feng
 Basic algorithms that reads txt files and user inputs
-to meets the project objectives
+to meet the project objectives
 """
 
 from datetime import *
@@ -45,6 +45,7 @@ def get_info(stall_name):
     # info_list[0] is the operating hours
     # info_list[1:] is the menu
     # return a tuple of the above mentioned information
+
     return info_list[0], info_list[1:]
 
 

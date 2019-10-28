@@ -12,6 +12,7 @@ Built with Tkinter
 from tkinter import *
 from tkinter import Button
 
+
 from Canteen_Info_Sys import *
 
 
@@ -237,7 +238,19 @@ def menu(root, data, stall_name):
     canvas = display_stall(root, data, stall_name)
 
     # have to read the menu
-    canvas.create_text(500, 400, text='MENU')
+    #canvas.create_text(500, 400, text='MENU')
+
+    # reads the stalls info (bryan)
+    info_list = get_info(stall_name)
+
+
+    XBASE, YBASE, DISTANCE = 10, 20, 20
+    for i, word in enumerate(info_list):
+        canvas. create_text((XBASE, YBASE + i * DISTANCE), text=word, anchor=W, font='Arial 30')
+
+
+
+
 
 
 def queue_time(root, data, stall_name):
