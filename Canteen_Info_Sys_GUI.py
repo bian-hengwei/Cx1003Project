@@ -66,6 +66,8 @@ def cover(root, data):
                                        y=data.height * 2 // 3 - 20, width=300, height=100, anchor=CENTER)
 
 
+# changes the time object
+# allows user to set time
 def change_date(root, data, time_string):
     data.time.change_date(time_string)
     select_stall(root, data)
@@ -228,7 +230,7 @@ def display_stall(root, data, stall_name):
                                  height=data.height // 15, anchor=CENTER)
 
     # stall name
-    canvas.create_text(data.width // 2, data.height // 7 + 15, text=stall_name, font=('Chalkduster 60'), fill='white')
+    canvas.create_text(data.width // 2, data.height // 7 + 15, text=stall_name, font='Chalkduster 60', fill='white')
 
     # a back button
     back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: select_stall(root, data))
@@ -241,9 +243,11 @@ def menu(root, data, stall_name):
     canvas = display_stall(root, data, stall_name)
 
     # reads the stalls info (bryan)
-    info_list = get_info(stall_name)
+    info_list = get_info(stall_name)[1]
 
-    XBASE, YBASE, DISTANCE = 10, 20, 20
+    print(info_list)
+
+    XBASE, YBASE, DISTANCE = 150, 20, 50
     for i, word in enumerate(info_list):
         canvas.create_text((XBASE, 300 + YBASE + i * DISTANCE), text=word, anchor=W, font='Arial 30')
 
@@ -291,6 +295,5 @@ def operating_hours(root, data, stall_name):
     info_list_op = get_info(filename)
 
     # display operating hour
-    XBASE, YBASE, DISTANCE = 10, 20, 20
     for i, word in enumerate(info_list_op):
         canvas.create_text((data.width // 2, 410), text=word, anchor=CENTER, font='Arial 45')
