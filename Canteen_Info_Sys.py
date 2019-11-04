@@ -89,6 +89,7 @@ class Time:
 
         return time_string
 
+# reads a string representation of time and set the time data to the object
     def change_date(self, time_string):
         self.date = time_string[0:2]
         self.month = str(self.months.index(time_string[3:6]))
