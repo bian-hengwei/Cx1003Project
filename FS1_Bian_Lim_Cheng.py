@@ -9,9 +9,9 @@ Main file that runs the whole app
 
 from Canteen_Info_Sys_GUI import *
 
+
 # main func that runs the whole app
 def main(width=1000, height=800):
-
     # creates a root obj and its canvas
     root = Tk()
     root.title('North Spine Canteen Information System')
@@ -21,6 +21,7 @@ def main(width=1000, height=800):
     # an object that stores images
     class Struct:
         pass
+
     data = Struct()
     initialize(data)
     data.width, data.height = width, height

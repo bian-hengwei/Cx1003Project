@@ -95,5 +95,5 @@ class Time:
         self.month = str(self.months.index(time_string[3:6]))
         self.year = time_string[7:11]
         self.hour = time_string[13:15]
-        self.minute = time_string[16:]
+        self.minute = time_string[16:18]
         self.day_of_week = datetime(int(self.year), int(self.month), int(self.date)).weekday()

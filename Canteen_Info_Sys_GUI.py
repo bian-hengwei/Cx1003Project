@@ -48,29 +48,96 @@ def cover(root, data):
     select_stall_button = Button(canvas, text='SELECT\nSTORE', font='Times 30 bold',
                                  command=lambda: change_date(root, data, data.time.get_current_time().to_string()[5:]))
     select_stall_button.place(x=data.width * 3 // 4, y=data.height // 3 - 20,
-                              width=300, height=100, anchor=CENTER)
-
-    # Change date button
-    change_date_button = Button(canvas, text='View Stores By:\n', font='Times 30 bold',
-                                command=lambda: change_date(root, data, time_string.get()))
-    change_date_button.place(x=data.width * 3 // 4, y=data.height // 2 - 20, width=300, height=100, anchor=CENTER)
-
-    # entry widgets that allows time input
-    time_string = StringVar(canvas, data.time.to_string()[5:])
-    time_entry = Entry(canvas, textvariable=time_string, font='Times 25 bold', justify='center')
-    time_entry.place(x=data.width * 3 // 4, y=data.height // 2 + 10, width=300, height=50, anchor=CENTER)
+                              width=300, height=120, anchor=CENTER)
 
     # exit button
     Button(canvas, text='Exit', font='Times 30 bold',
            command=root.destroy).place(x=data.width * 3 // 4,
-                                       y=data.height * 2 // 3 - 20, width=300, height=100, anchor=CENTER)
+                                       y=data.height * 2 // 3 - 20, width=300, height=120, anchor=CENTER)
+
+    # a constant for drop-down list
+    c = 55
+
+    # date drop-down list
+    date = ['01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 32)]
+
+    variable1 = StringVar(root)
+    variable1.set(data.time.get_current_time().to_string()[5:7])  # default value
+
+    d = OptionMenu(root, variable1, *date)
+    d.place(x=605, y=data.height // 2 - 7, width=c, anchor=SW)
+
+    # month drop-down list
+    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    variable = StringVar(root)
+    variable.set(data.time.get_current_time().to_string()[8:11])  # default value
+
+    m = OptionMenu(root, variable, *month)
+    m.place(x=605 + c, y=data.height // 2 - 7, width=c, anchor=SW)
+
+    # year drop-down list
+    year = [x for x in range(2019, 2030)]
+
+    variable2 = StringVar(root)
+    variable2.set(data.time.get_current_time().to_string()[12:16])  # default value
+
+    y = OptionMenu(root, variable2, *year)
+    y.place(x=605 + 2 * c, y=data.height // 2 - 7, width=c + 15, anchor=SW)
+
+    # hour drop-down list
+    hour = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 24)]
+
+    variable3 = StringVar(root)
+    variable3.set(data.time.get_current_time().to_string()[18:20])  # default value
+
+    h = OptionMenu(root, variable3, *hour)
+    h.place(x=605 + 3 * c + 15, y=data.height // 2 - 7, width=c, anchor=SW)
+
+    # minute drop-down list
+    minute = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 60)]
+
+    variable4 = StringVar(root)
+    variable4.set(data.time.get_current_time().to_string()[21:23])  # default value
+
+    mi = OptionMenu(root, variable4, *minute)
+    mi.place(x=605 + 4 * c + 15, y=data.height // 2 - 7, width=c, anchor=SW)
+
+    # get all the above drop-down list value
+    def get_var():
+        d_str = variable1.get()
+        m_str = variable.get()
+        y_str = variable2.get()
+        h_str = variable3.get()
+        mi_str = variable4.get()
+        time_str = str(d_str) + " " + m_str + " " + str(y_str) + ", " + str(h_str) + ":" + str(mi_str)
+        change_date(root, data, time_str)
+
+    # Change date button
+    change_date_button = Button(canvas, font='Times 30 bold', text="VIEW STORE BY:\n\nEnter",
+                                command=get_var)
+    change_date_button.place(x=data.width * 3 // 4, y=data.height // 2 - 20, width=300, height=120, anchor=CENTER)
 
 
 # changes the time object
 # allows user to set time
-def change_date(root, data, time_string):
-    data.time.change_date(time_string)
-    select_stall(root, data)
+def change_date(root, data, time_str):
+    try:
+        data.time.change_date(time_str)
+        select_stall(root, data)
+
+    # handle date out of month error
+    except ValueError:
+        # create a pop up window for error message
+        window = Tk()
+        window.title('ERROR')
+        window.geometry('300x70')
+        err = Label(window, text='Date is out of range for month.\nPlease try again!')
+        err.pack()
+
+        # close error window button
+        errbtn = Button(window, text='Close', font='12', command=window.destroy)
+        errbtn.pack()
 
 
 # draws a canvas that shows the stalls list
@@ -191,29 +258,6 @@ def display_stall(root, data, stall_name):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
-    # background
-    canvas.create_rectangle(0, 0, data.width, data.height,
-                            fill='gray25')
-
-    # create the background of the content
-    radius = 50
-    canvas.create_rectangle(data.width // 8, data.height * 2 // 6 - 30, data.width * 7 // 8, data.height * 5 // 6 - 30,
-                            fill='gray64', outline='gray64')
-    canvas.create_rectangle(data.width // 8 + radius, data.height * 2 // 6 - 30 - radius, data.width * 7 // 8 - radius,
-                            data.height * 5 // 6 - 30 + radius, fill='gray64', outline='gray64')
-    canvas.create_arc(data.width * 7 // 8 - radius * 2, data.height * 2 // 6 - 30 - radius, data.width * 7 // 8,
-                      data.height * 2 // 6 - 30 + radius
-                      , start=0, extent=90, fill='gray64', outline='gray64')
-    canvas.create_arc(data.width // 8, data.height * 2 // 6 - 30 - radius, data.width // 8 + radius * 2,
-                      data.height * 2 // 6 - 30 + radius
-                      , start=90, extent=90, fill='gray64', outline='gray64')
-    canvas.create_arc(data.width // 8, data.height * 5 // 6 - 30 - radius, data.width // 8 + radius * 2,
-                      data.height * 5 // 6 - 30 + radius
-                      , start=180, extent=90, fill='gray64', outline='gray64')
-    canvas.create_arc(data.width * 7 // 8 - radius * 2, data.height * 5 // 6 - 30 - radius, data.width * 7 // 8,
-                      data.height * 5 // 6 - 30 + radius
-                      , start=270, extent=90, fill='gray64', outline='gray64')
-
     # menu button
     menu_button = Button(canvas, text='Menu', font='Times 20', command=lambda: menu(root, data, stall_name))
     menu_button.place(x=data.width // 3, y=data.height // 15, width=data.width // 10,
@@ -245,8 +289,6 @@ def menu(root, data, stall_name):
     # reads the stalls info (bryan)
     info_list = get_info(stall_name)[1]
 
-    print(info_list)
-
     XBASE, YBASE, DISTANCE = 150, 20, 50
     for i, word in enumerate(info_list):
         canvas.create_text((XBASE, 300 + YBASE + i * DISTANCE), text=word, anchor=W, font='Arial 30')
@@ -259,15 +301,12 @@ def queue_time(root, data, stall_name):
     def show_queue_time():
         # get the value from the entry below
         ppl = queue_enter.get()
-
-        filename = stall_name + ' queue'
-        # reads the stalls' speed
-        info_list_op = get_info(filename)
-        num = float(info_list_op[0])
+        queue = {"McDonald's": 0.4, "The Sandwich Guys": 1.5, "Japanese Korean Delight": 1.1, "Vietnamese Cuisine": 1.4,
+                 "Malay BBQ": 1.25, "Cantonese Roast Duck": 0.8}
 
         # calculate the queue time
         ppl_int = int(ppl)
-        minute = int(ppl_int // num)
+        minute = int(ppl_int // queue[stall_name])
         ppl_str = str(minute)
 
         # create a label to show the queuing time message
@@ -279,11 +318,11 @@ def queue_time(root, data, stall_name):
                        , font='Arial 35')
 
     # the entry for the number of queuing people
-    queue_enter = Entry(root,font='Arial 30', width=15)
+    queue_enter = Entry(root, font='Arial 30', width=15)
     queue_enter.place(x=data.width // 2 - 70, y=data.height // 2 + 10, anchor=CENTER)
 
     # a button for calculate the time
-    calculate_btn = Button(root, text='Calculate', width=9, height=2, command=show_queue_time,font='Arial 19')
+    calculate_btn = Button(root, text='Calculate', width=9, height=2, command=show_queue_time, font='Arial 19')
     calculate_btn.place(x=data.width // 2 + 115, y=data.height // 2 + 10, anchor=CENTER)
 
 
