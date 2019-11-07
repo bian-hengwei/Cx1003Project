@@ -12,11 +12,15 @@ from datetime import *
 
 
 # returns the stalls list stored in stalls_list.txt
-def get_stalls():
+def get_stalls(data):
     # opens the stalls list
     # prints an error message if the file is not found
     try:
-        stalls_list_file = open('data/stalls_list.txt', 'rt')
+        if data.time.to_string()[0:3] != 'Sat' and data.time.to_string()[0:3] != 'Sun':
+            stalls_list_file = open('data/stalls_list.txt', 'rt')
+        else:
+            stalls_list_file = open('data/stalls_list_weekend.txt', 'rt')
+
     except FileNotFoundError:
         return 'Cannot find the stalls list'
 
@@ -89,7 +93,7 @@ class Time:
 
         return time_string
 
-# reads a string representation of time and set the time data to the object
+    # reads a string representation of time and set the time data to the object
     def change_date(self, time_string):
         self.date = time_string[0:2]
         self.month = str(self.months.index(time_string[3:6]))
