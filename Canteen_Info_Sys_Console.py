@@ -12,6 +12,7 @@ Used to test all inner functions
 from Canteen_Info_Sys import *
 
 
+
 def cover():
 
     print('''

@@ -14,6 +14,8 @@ from tkinter import Button
 
 from Canteen_Info_Sys import *
 
+from time import *
+
 
 # initializes data that MUST be initialized in the main() function
 def initialize(data):
@@ -132,6 +134,7 @@ def change_date(root, data, time_str):
     try:
         data.time.change_date(time_str)
         select_stall(root, data)
+
     # handle date out of month error
     except ValueError:
         # create a pop up window for error message
@@ -324,17 +327,47 @@ def queue_time(root, data, stall_name):
     def show_queue_time():
         # get the value from the entry below
         ppl = queue_enter.get()
+
+        # the waiting time for each store per person
         queue = {"McDonald's": 0.4, "The Sandwich Guys": 1.5, "Japanese Korean Delight": 1.1, "Vietnamese Cuisine": 1.4,
                  "Malay BBQ": 1.25, "Cantonese Roast Duck": 0.8}
 
-        # calculate the queue time
-        ppl_int = int(ppl)
-        minute = int(ppl_int // queue[stall_name])
-        ppl_str = str(minute)
+        try:
+            # calculate the queue time
+            ppl_float = float(ppl)
 
-        # create a label to show the queuing time message
-        show_var = 'Estimated queuing time is: ' + ppl_str + ' minutes'
-        canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 35', fill='white')
+            if 0 <= ppl_float < 100 and ppl_float % 1 == 0:
+                minute = int(ppl_float // queue[stall_name])
+                ppl_str = str(minute)
+                # create a label to show the queuing time message
+                show_var = 'Estimated queuing time is: ' + ppl_str + ' minutes'
+                canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 35',
+                                   fill='white')
+
+            else:
+                # create a pop up window for error message
+                window1 = Tk()
+                window1.title('ERROR')
+                window1.geometry('250x70')
+                err1 = Label(window1, text='You can only enter an integer,\n and it must between 1 and 99')
+                err1.pack()
+
+                # close error window button
+                errorbtn1 = Button(window1, text='Close', font='12', command=window1.destroy)
+                errorbtn1.pack()
+
+        # if the user input not number
+        except ValueError:
+            # create a pop up window for error message
+            window = Tk()
+            window.title('ERROR')
+            window.geometry('200x50')
+            err = Label(window, text='Please enter an integer!')
+            err.pack()
+
+            # close error window button
+            errorbtn = Button(window, text='Close', font='12', command=window.destroy)
+            errorbtn.pack()
 
     # entering message
     canvas.create_text(data.width // 2, data.height // 3 + 40, text='Please enter the number of pax queuing:'
@@ -345,7 +378,8 @@ def queue_time(root, data, stall_name):
     queue_enter.place(x=data.width // 2 - 70, y=data.height // 2 + 10, anchor=CENTER)
 
     # a button for calculate the time
-    calculate_btn = Button(root, text='Calculate', width=9, height=2, command=show_queue_time, font='Arial 19')
+    calculate_btn = Button(root, text='Calculate', width=9, height=2, command=lambda: show_queue_time(),
+                           font='Arial 19')
     calculate_btn.place(x=data.width // 2 + 115, y=data.height // 2 + 10, anchor=CENTER)
 
 
