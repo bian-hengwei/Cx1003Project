@@ -65,25 +65,25 @@ def cover(root, data):
                                        y=data.height * 2 // 3 - 20, width=300, height=120, anchor=CENTER)
 
     # a constant for drop-down list
-    c = 55
+    margin = 55
 
     # date drop-down list
-    date = ['01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 32)]
+    dates_list = ['0' + str(x) for x in range(1, 10)] + [str(x) for x in range(10, 32)]
 
     variable1 = StringVar(root)
     variable1.set(data.time.get_current_time().to_string()[5:7])  # default value
 
-    d = OptionMenu(root, variable1, *date)
-    d.place(x=605, y=data.height // 2 - 7, width=c, anchor=SW)
+    d = OptionMenu(root, variable1, *dates_list)
+    d.place(x=605, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # month drop-down list
-    month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    months_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
     variable = StringVar(root)
     variable.set(data.time.get_current_time().to_string()[8:11])  # default value
 
-    m = OptionMenu(root, variable, *month)
-    m.place(x=605 + c, y=data.height // 2 - 7, width=c, anchor=SW)
+    m = OptionMenu(root, variable, *months_list)
+    m.place(x=605 + margin, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # year drop-down list
     year = [x for x in range(2019, 2030)]
@@ -92,25 +92,25 @@ def cover(root, data):
     variable2.set(data.time.get_current_time().to_string()[12:16])  # default value
 
     y = OptionMenu(root, variable2, *year)
-    y.place(x=605 + 2 * c, y=data.height // 2 - 7, width=c + 15, anchor=SW)
+    y.place(x=605 + 2 * margin, y=data.height // 2 - 7, width=margin + 15, anchor=SW)
 
     # hour drop-down list
-    hour = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 24)]
+    hour = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [str(x) for x in range(10, 24)]
 
     variable3 = StringVar(root)
     variable3.set(data.time.get_current_time().to_string()[18:20])  # default value
 
     h = OptionMenu(root, variable3, *hour)
-    h.place(x=605 + 3 * c + 15, y=data.height // 2 - 7, width=c, anchor=SW)
+    h.place(x=605 + 3 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # minute drop-down list
-    minute = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [x for x in range(10, 60)]
+    minutes_list = ['0' + str(x) for x in range(10)] + [str(x) for x in range(10, 60)]
 
     variable4 = StringVar(root)
     variable4.set(data.time.get_current_time().to_string()[21:23])  # default value
 
-    mi = OptionMenu(root, variable4, *minute)
-    mi.place(x=605 + 4 * c + 15, y=data.height // 2 - 7, width=c, anchor=SW)
+    mi = OptionMenu(root, variable4, *minutes_list)
+    mi.place(x=605 + 4 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # get all the above drop-down list value
     def get_var():
@@ -194,67 +194,6 @@ def select_stall(root, data):
     # shows current time
     canvas.create_text(data.width // 2, data.height * 9 // 10, text=data.time.to_string(),
                        font='Times 25 bold', fill='white')
-
-
-# error page
-def error(root, data, error_message='ERROR'):
-    # clears the root
-    for canvas in root.winfo_children():
-        canvas.destroy()
-
-    # creates a new empty canvas with the same width and height
-    canvas = Canvas(root, width=data.width, height=data.height)
-    canvas.configure(highlightthickness=0)
-    canvas.pack()
-
-    canvas.create_text(data.width // 2, data.height // 4, text=error_message, font='Times 40')
-
-    Button(canvas, text='Terminate', font='Times 40', command=root.destroy).place(
-        x=data.width // 2, y=data.height // 2, anchor=CENTER)
-
-    Button(canvas, text='Restart', font='Times 40', command=lambda: cover(root, data)).place(
-        x=data.width // 2, y=data.height * 3 // 4, anchor=CENTER)
-
-
-# this is a page template
-# copy and paste when creating new pages to save time
-def page_template(root, data):
-    # clears the root
-    for canvas in root.winfo_children():
-        canvas.destroy()
-
-    # creates a new canvas
-    canvas = Canvas(root, width=data.width, height=data.height)
-    canvas.configure(highlightthickness=0)
-    canvas.pack()
-
-    # draws the background
-    canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
-
-    # a button with common configs edited
-    btn = Button(canvas, text='BACK BUTTON', fg='green', bg="#%02x%02x%02x" % (50, 100, 200),
-                 font='Times 50 bold italic underline', command=lambda: cover(root, data))
-    btn.place(x=data.width // 2, y=data.height // 4, anchor=CENTER)
-
-    # a text label that shows the content entered in the entry
-    text_label = Label(canvas, fg='green', font='Georgia 30')
-    text_label.place(x=data.width // 2, y=data.height // 2, anchor=CENTER)
-
-    # a string variable that stores the text in entry when enter button is clicked
-    entry_input = StringVar(None, 'ENTER SOMETHING!')
-
-    # entry widget
-    entry = Entry(canvas, textvariable=entry_input)
-    entry.place(x=data.width // 2, y=data.height * 3 // 4, anchor=CENTER, height=20)
-
-    # button that helps display stored information
-    btn_enter = Button(canvas, text='ENTER',
-                       command=lambda: text_label.config(text='You Entered: ' + entry_input.get(), bg='red'))
-    btn_enter.place(x=data.width // 2, y=data.height * 3 // 4 + 20, anchor=CENTER, height=20)
-
-    # returns to the cover
-    btn_back = Button(canvas, text='Back', command=lambda: cover(root, data))
-    btn_back.place(x=0, y=data.height, anchor=SW)
 
 
 def display_stall(root, data, stall_name):
@@ -353,8 +292,8 @@ def queue_time(root, data, stall_name):
                 err1.pack()
 
                 # close error window button
-                errorbtn1 = Button(window1, text='Close', font='12', command=window1.destroy)
-                errorbtn1.pack()
+                error_button_one = Button(window1, text='Close', font='12', command=window1.destroy)
+                error_button_one.pack()
 
         # if the user input not number
         except ValueError:
