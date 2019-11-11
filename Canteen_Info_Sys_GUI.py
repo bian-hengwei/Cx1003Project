@@ -55,7 +55,7 @@ def cover(root, data):
 
     # a button that directs to the select store window
     select_stall_button = Button(canvas, text='SELECT\nSTORE', font='Times 30 bold',
-                                 command=lambda: change_date(root, data, data.time.get_current_time().to_string()[5:]))
+                                 command=lambda: change_date(root, data))
     select_stall_button.place(x=data.width * 3 // 4, y=data.height // 3 - 20,
                               width=300, height=120, anchor=CENTER)
 
@@ -64,63 +64,68 @@ def cover(root, data):
            command=root.destroy).place(x=data.width * 3 // 4,
                                        y=data.height * 2 // 3 - 20, width=300, height=120, anchor=CENTER)
 
+    draw_change_date(root, canvas, data)
+
+
+# draws change date buttons and drop_down lists on cover
+def draw_change_date(root, canvas, data):
     # a constant for drop-down list
     margin = 55
 
     # date drop-down list
     dates_list = ['0' + str(x) for x in range(1, 10)] + [str(x) for x in range(10, 32)]
 
-    variable1 = StringVar(root)
-    variable1.set(data.time.get_current_time().to_string()[5:7])  # default value
+    date_variable = StringVar(root)
+    date_variable.set(data.time.to_string()[5:7])  # default value
 
-    d = OptionMenu(root, variable1, *dates_list)
-    d.place(x=605, y=data.height // 2 - 7, width=margin, anchor=SW)
+    date_drop_down_list = OptionMenu(root, date_variable, *dates_list)
+    date_drop_down_list.place(x=605, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # month drop-down list
     months_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    variable = StringVar(root)
-    variable.set(data.time.get_current_time().to_string()[8:11])  # default value
+    month_variable = StringVar(root)
+    month_variable.set(data.time.to_string()[8:11])  # default value
 
-    m = OptionMenu(root, variable, *months_list)
-    m.place(x=605 + margin, y=data.height // 2 - 7, width=margin, anchor=SW)
+    month_drop_down_list = OptionMenu(root, month_variable, *months_list)
+    month_drop_down_list.place(x=605 + margin, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # year drop-down list
-    year = [x for x in range(2019, 2030)]
+    years_list = [x for x in range(2000, 2030)]
 
-    variable2 = StringVar(root)
-    variable2.set(data.time.get_current_time().to_string()[12:16])  # default value
+    year_variable = StringVar(root)
+    year_variable.set(data.time.to_string()[12:16])  # default value
 
-    y = OptionMenu(root, variable2, *year)
-    y.place(x=605 + 2 * margin, y=data.height // 2 - 7, width=margin + 15, anchor=SW)
+    year_drop_down_list = OptionMenu(root, year_variable, *years_list)
+    year_drop_down_list.place(x=605 + 2 * margin, y=data.height // 2 - 7, width=margin + 15, anchor=SW)
 
     # hour drop-down list
-    hour = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [str(x) for x in range(10, 24)]
+    hours_list = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [str(x) for x in range(10, 24)]
 
-    variable3 = StringVar(root)
-    variable3.set(data.time.get_current_time().to_string()[18:20])  # default value
+    hour_variable = StringVar(root)
+    hour_variable.set(data.time.to_string()[18:20])  # default value
 
-    h = OptionMenu(root, variable3, *hour)
-    h.place(x=605 + 3 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
+    hour_drop_down_list = OptionMenu(root, hour_variable, *hours_list)
+    hour_drop_down_list.place(x=605 + 3 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # minute drop-down list
     minutes_list = ['0' + str(x) for x in range(10)] + [str(x) for x in range(10, 60)]
 
-    variable4 = StringVar(root)
-    variable4.set(data.time.get_current_time().to_string()[21:23])  # default value
+    minute_variable = StringVar(root)
+    minute_variable.set(data.time.get_current_time().to_string()[21:23])  # default value
 
-    mi = OptionMenu(root, variable4, *minutes_list)
-    mi.place(x=605 + 4 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
+    minute_drop_down_list = OptionMenu(root, minute_variable, *minutes_list)
+    minute_drop_down_list.place(x=605 + 4 * margin + 15, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # get all the above drop-down list value
     def get_var():
-        d_str = variable1.get()
-        m_str = variable.get()
-        y_str = variable2.get()
-        h_str = variable3.get()
-        mi_str = variable4.get()
-        time_str = str(d_str) + " " + m_str + " " + str(y_str) + ", " + str(h_str) + ":" + str(mi_str)
-        change_date(root, data, time_str)
+        date_str = date_variable.get()
+        month_str = month_variable.get()
+        year_str = year_variable.get()
+        hour_str = hour_variable.get()
+        minute_str = minute_variable.get()
+        new_time = date_str, month_str, year_str, hour_str, minute_str
+        change_date(root, data, new_time)
 
     # Change date button
     change_date_button = Button(canvas, font='Times 30 bold', text="VIEW STORE BY:\n\nEnter",
@@ -128,25 +133,19 @@ def cover(root, data):
     change_date_button.place(x=data.width * 3 // 4, y=data.height // 2 - 20, width=300, height=120, anchor=CENTER)
 
 
-# changes the time object
-# allows user to set time
-def change_date(root, data, time_str):
-    try:
-        data.time.change_date(time_str)
-        select_stall(root, data)
+# changes current date
+def change_date(root, data, new_time='reset'):
+    data.time.change_date(new_time)
+    select_stall(root, data)
 
-    # handle date out of month error
-    except ValueError:
-        # create a pop up window for error message
-        window = Tk()
-        window.title('ERROR')
-        window.geometry('300x70')
-        err = Label(window, text='Date is out of range for month.\nPlease try again!')
-        err.pack()
 
-        # close error window button
-        errorbtn = Button(window, text='Close', font='12', command=window.destroy)
-        errorbtn.pack()
+# pops up an error page
+def error_page(error_message='Unexpected Error'):
+    window = Tk()
+    window.title('ERROR')
+    window.geometry('300x70')
+    error_label = Label(window, text=error_message)
+    error_label.pack()
 
 
 # draws a canvas that shows the stalls list
@@ -196,6 +195,8 @@ def select_stall(root, data):
                        font='Times 25 bold', fill='white')
 
 
+# display the basic stall window
+# called by specific stall functions
 def display_stall(root, data, stall_name):
     # clears the root
     for canvas in root.winfo_children():
@@ -238,78 +239,63 @@ def display_stall(root, data, stall_name):
     return canvas
 
 
+# display the menu of a specific stall
 def menu(root, data, stall_name):
+    # draws the shared stall window
     canvas = display_stall(root, data, stall_name)
 
-    # reads the stalls info (bryan)
+    # reads the stalls info
     info_list = get_info(stall_name)[1]
 
-    XBASE, YBASE, DISTANCE = 150, 20, 50
+    # prints stalls menu
+    x_base, y_base, margin = 220, 270, 50
     for i, word in enumerate(info_list):
-        canvas.create_text((XBASE + 70, 250 + YBASE + i * DISTANCE), text=word, anchor=W, font='Bookman 30',
-                           fill='white')
-
-    # read operating hour
-    filename = stall_name + ' d'
-    info_list_d = get_info(filename)[1]
-
-    # display operating hour
-    for j, price in enumerate(info_list_d):
-        canvas.create_text((XBASE + 550, 250 + YBASE + j * DISTANCE), text=price, anchor=W, font='Bookman 30',
+        canvas.create_text((x_base, y_base + i * margin), text=word, anchor=W, font='Bookman 30',
                            fill='white')
 
 
 def queue_time(root, data, stall_name):
+
+    # draws the shared window
     canvas = display_stall(root, data, stall_name)
 
     # function for showing queue time
     def show_queue_time():
+
+        canvas.delete('queue_time')
+
         # get the value from the entry below
-        ppl = queue_enter.get()
+        queue_length = queue_enter.get()
 
         # the waiting time for each store per person
-        queue = {"McDonald's": 0.4, "The Sandwich Guys": 1.5, "Japanese Korean Delight": 1.1, "Vietnamese Cuisine": 1.4,
-                 "Malay BBQ": 1.25, "Cantonese Roast Duck": 0.8}
+        queues = {"McDonald's": 0.4, "The Sandwich Guys": 1.5, "Japanese Korean Delight": 1.1,
+                  "Vietnamese Cuisine": 1.4, "Malay BBQ": 1.25, "Cantonese Roast Duck": 0.8}
 
         try:
+
             # calculate the queue time
-            ppl_float = float(ppl)
+            queue = int(queue_length)
 
-            if 0 <= ppl_float < 100 and ppl_float % 1 == 0:
-                minute = int(ppl_float // queue[stall_name])
-                ppl_str = str(minute)
-                # create a label to show the queuing time message
-                show_var = 'Estimated queuing time is: ' + ppl_str + ' minutes'
-                canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 35',
-                                   fill='white')
+            assert 0 <= queue < 100
+            waiting_time = str(int(queue // queues[stall_name]))
+            # create a label to show the queuing time message
+            show_var = 'Estimated queuing time is: ' + waiting_time + ' minutes'
+            canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 35',
+                               fill='white', tag='queue_time')
 
-            else:
-                # create a pop up window for error message
-                window1 = Tk()
-                window1.title('ERROR')
-                window1.geometry('250x70')
-                err1 = Label(window1, text='You can only enter an integer,\n and it must between 1 and 99')
-                err1.pack()
+        # if the user input is not valid
+        except AssertionError:
 
-                # close error window button
-                error_button_one = Button(window1, text='Close', font='12', command=window1.destroy)
-                error_button_one.pack()
-
-        # if the user input not number
-        except ValueError:
             # create a pop up window for error message
-            window = Tk()
-            window.title('ERROR')
-            window.geometry('200x50')
-            err = Label(window, text='Please enter an integer!')
-            err.pack()
+            error_page('Queue Length Should Be Between 1 and 99!')
 
-            # close error window button
-            errorbtn = Button(window, text='Close', font='12', command=window.destroy)
-            errorbtn.pack()
+        except ValueError:
+
+            # create a pop up window for error message
+            error_page('Please Enter An Integer')
 
     # entering message
-    canvas.create_text(data.width // 2, data.height // 3 + 40, text='Please enter the number of pax queuing:'
+    canvas.create_text(data.width // 2, data.height // 3 + 40, text='Please Enter The Number of Pax Queuing:'
                        , font='Arial 35', fill='white')
 
     # the entry for the number of queuing people
