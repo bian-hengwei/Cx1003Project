@@ -249,11 +249,11 @@ def menu(root, data, stall_name):
         canvas.create_text((XBASE + 70, 250 + YBASE + i * DISTANCE), text=word, anchor=W, font='Bookman 30',
                            fill='white')
 
-    # read operating hour
+    # read dish price
     filename = stall_name + ' d'
     info_list_d = get_info(filename)[1]
 
-    # display operating hour
+    # display dish price
     for j, price in enumerate(info_list_d):
         canvas.create_text((XBASE + 550, 250 + YBASE + j * DISTANCE), text=price, anchor=W, font='Bookman 30',
                            fill='white')
