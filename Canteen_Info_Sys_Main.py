@@ -7,6 +7,7 @@ FS1 Cheng Yu Feng
 Main file that runs the whole app
 """
 
+# import GUI and runs
 from Canteen_Info_Sys_GUI import *
 
 
@@ -24,10 +25,7 @@ def main(width=1000, height=800):
         pass
 
     data = Struct()
-    error_message = initialize(data)
-    if error_message is not None:
-        error_page(error_message)
-        return
+    initialize(data)
     data.width, data.height = width, height
 
     # draws the cover
