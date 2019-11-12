@@ -1,8 +1,8 @@
-Cantonese Roast Duck 7:00-22:00 S$0.5
-Roasted Duck Rice: ($3.30)
-Roasted Duck Noodle: ($3.30)
-Char Siew Rice: ($2.80)
-Char Siew Noodle: ($2.80)
-Roasted Meat Rice: ($2.80)
-Char Siew Roasted Meat Noodle: ($4.00)
-
+Mon,Tue,Wed,Thu,Fri,Sat,Sun|08:00-21:30
+0.8
+Roasted Duck Rice&$3.30&Mon|08:20-08:30
+Roasted Duck Noodle&$3.30&ALL
+Char Siew Rice&$2.80&ALL
+Char Siew Noodle&$2.80&ALL
+Roasted Meat Rice&$2.80&ALL
+Char Siew Roasted Meat Noodle&$4.00&ALL

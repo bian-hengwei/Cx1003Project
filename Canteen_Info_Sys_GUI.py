@@ -14,25 +14,36 @@ from tkinter import Button
 
 from Canteen_Info_Sys import *
 
-from time import *
-
 
 # initializes data that MUST be initialized in the main() function
 def initialize(data):
-    data.cover = PhotoImage(file='images/cover.png')
-    data.Cantonese = PhotoImage(file='images/Cantonese.png')
-    data.Japanese = PhotoImage(file='images/Japanese Korean Delight.png')
-    data.Malay = PhotoImage(file='images/Malay BBQ.png')
-    data.McDonald = PhotoImage(file='images/McDonald\'s.png')
-    data.Sandwich = PhotoImage(file='images/The Sandwich Guys.png')
-    data.Vietnamese = PhotoImage(file='images/Vietnamese Cuisine.png')
 
+    # opens the cover image
+    data.cover = PhotoImage(file='images/cover.png')
+
+    # check if list of stalls name is available
+    data.stalls_list = get_stalls()
+    if isinstance(data.stalls_list, str):
+        return data.stalls_list
+
+    # try to initialize all backgrounds
+    data.backgrounds = []
+    for stall_name in data.stalls_list:
+        try:
+            data.backgrounds.append(PhotoImage(file='images/' + stall_name + '.png'))
+        except TclError:
+            return 'Stall ' + stall_name + ' Background Not Found'
+
+    # set time to current time
     data.time = Time()
     data.time.get_current_time()
+
+    data.current_stall = None
 
 
 # draws the cover
 def cover(root, data):
+
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -69,6 +80,7 @@ def cover(root, data):
 
 # draws change date buttons and drop_down lists on cover
 def draw_change_date(root, canvas, data):
+
     # a constant for drop-down list
     margin = 55
 
@@ -135,21 +147,25 @@ def draw_change_date(root, canvas, data):
 
 # changes current date
 def change_date(root, data, new_time='reset'):
+
     data.time.change_date(new_time)
     select_stall(root, data)
 
 
 # pops up an error page
 def error_page(error_message='Unexpected Error'):
+
+    # creates a new pop up error window
     window = Tk()
     window.title('ERROR')
-    window.geometry('300x70')
     error_label = Label(window, text=error_message)
     error_label.pack()
+    window.mainloop()
 
 
 # draws a canvas that shows the stalls list
 def select_stall(root, data):
+
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -162,9 +178,20 @@ def select_stall(root, data):
     # draws a background image
     canvas.create_image(data.width // 2, data.height // 2, image=data.cover)
 
+    # a back button
+    back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: cover(root, data))
+    back_button.place(x=0, y=data.height, width=100, height=80, anchor=SW)
+
     # reads the stalls list
-    stalls_list = get_stalls(data)
+    stalls_list = list()
+    for stall in data.stalls_list:
+        if data.time in Stall(stall).hours:
+            stalls_list.append(stall)
     stalls_count = len(stalls_list)
+
+    if stalls_count == 0:
+        canvas.create_text(data.width // 2, data.height // 2, text='Canteen Closed', font='Bookman 50', fill='white')
+        return
 
     # builds the buttons
     margin_height = data.height // (stalls_count * 2 + 1)
@@ -183,21 +210,25 @@ def select_stall(root, data):
             y_index = stall_index
         y = (y_index + 1) * margin_height + y_index * button_height
         stall = Button(canvas, text=stall_name, font='Times 25 bold',
-                       command=lambda name=stall_name: menu(root, data, name))
+                       command=lambda name=stall_name: go_to_stall(root, data, name))
         stall.place(x=x, y=y + 40, width=button_width, height=button_height, anchor=NW)
-
-    # a back button
-    back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: cover(root, data))
-    back_button.place(x=0, y=data.height, width=100, height=80, anchor=SW)
 
     # shows current time
     canvas.create_text(data.width // 2, data.height * 9 // 10, text=data.time.to_string(),
                        font='Times 25 bold', fill='white')
 
 
+# change data.current_stall
+def go_to_stall(root, data, stall_name):
+
+    data.current_stall = Stall(stall_name)
+    menu(root, data)
+
+
 # display the basic stall window
 # called by specific stall functions
-def display_stall(root, data, stall_name):
+def display_stall(root, data):
+
     # clears the root
     for canvas in root.winfo_children():
         canvas.destroy()
@@ -207,30 +238,30 @@ def display_stall(root, data, stall_name):
     canvas.configure(highlightthickness=0)
     canvas.pack()
 
-    # give a background for each store
-    stalls_list = get_stalls(data)
-    x = stalls_list.index(stall_name)
-    image_dic = {0: data.McDonald, 1: data.Sandwich, 2: data.Japanese, 3: data.Cantonese, 4: data.Malay,
-                 5: data.Vietnamese}
-    canvas.create_image(data.width // 2, data.height // 2, image=image_dic[x])
+    # give a background for store
+    stall_index = data.stalls_list.index(data.current_stall.name)
+    canvas.create_image(data.width // 2, data.height // 2, image=data.backgrounds[stall_index])
 
     # menu button
-    menu_button = Button(canvas, text='Menu', font='Times 20', command=lambda: menu(root, data, stall_name))
+    menu_button = Button(canvas, text='Menu', font='Times 20',
+                         command=lambda: menu(root, data))
     menu_button.place(x=data.width // 3, y=data.height // 15 + 30, width=data.width // 10,
                       height=data.height // 15, anchor=CENTER)
     # queue time button
     queue_time_button = Button(canvas, text='Queue\nTime', font='Times 20',
-                               command=lambda: queue_time(root, data, stall_name))
+                               command=lambda: queue_time(root, data))
     queue_time_button.place(x=data.width // 2, y=data.height // 15 + 30, width=data.width // 10,
                             height=data.height // 15, anchor=CENTER)
     # operating hours button
     operating_hours_button = Button(canvas, text='Operating\nHours',
-                                    font='Times 20', command=lambda: operating_hours(root, data, stall_name))
+                                    font='Times 20',
+                                    command=lambda:operating_hours(root, data))
     operating_hours_button.place(x=data.width * 2 // 3, y=data.height // 15 + 30, width=data.width // 10,
                                  height=data.height // 15, anchor=CENTER)
 
     # stall name
-    canvas.create_text(data.width // 2, data.height // 7 + 50, text=stall_name, font='Impact 60', fill='white')
+    canvas.create_text(data.width // 2, data.height // 7 + 50,
+                       text=data.current_stall.name, font='Impact 60', fill='white')
 
     # a back button
     back_button = Button(canvas, text='BACK', font='Times 30 bold', command=lambda: select_stall(root, data))
@@ -240,24 +271,25 @@ def display_stall(root, data, stall_name):
 
 
 # display the menu of a specific stall
-def menu(root, data, stall_name):
+def menu(root, data):
     # draws the shared stall window
-    canvas = display_stall(root, data, stall_name)
-
-    # reads the stalls info
-    info_list = get_info(stall_name)[1]
+    canvas = display_stall(root, data)
 
     # prints stalls menu
     x_base, y_base, margin = 220, 270, 50
-    for i, word in enumerate(info_list):
-        canvas.create_text((x_base, y_base + i * margin), text=word, anchor=W, font='Bookman 30',
-                           fill='white')
+    counter = 0
+    for dish in data.current_stall.menu:
+        if data.time in data.current_stall.menu[dish][1]:
+            canvas.create_text(x_base, y_base + counter * margin, text=dish, anchor=W, font='Bookman 30', fill='white')
+            canvas.create_text(data.width - x_base, y_base + counter * margin, text=data.current_stall.menu[dish][0],
+                               anchor=W, font='Bookman 30', fill='white')
+            counter += 1
 
 
-def queue_time(root, data, stall_name):
+def queue_time(root, data):
 
     # draws the shared window
-    canvas = display_stall(root, data, stall_name)
+    canvas = display_stall(root, data)
 
     # function for showing queue time
     def show_queue_time():
@@ -267,17 +299,13 @@ def queue_time(root, data, stall_name):
         # get the value from the entry below
         queue_length = queue_enter.get()
 
-        # the waiting time for each store per person
-        queues = {"McDonald's": 0.4, "The Sandwich Guys": 1.5, "Japanese Korean Delight": 1.1,
-                  "Vietnamese Cuisine": 1.4, "Malay BBQ": 1.25, "Cantonese Roast Duck": 0.8}
-
         try:
 
             # calculate the queue time
             queue = int(queue_length)
 
             assert 0 <= queue < 100
-            waiting_time = str(int(queue // queues[stall_name]))
+            waiting_time = str(int(queue // data.current_stall.queue))
             # create a label to show the queuing time message
             show_var = 'Estimated queuing time is: ' + waiting_time + ' minutes'
             canvas.create_text(data.width // 2, data.height * 2 // 3 - 20, text=show_var, font='Arial 35',
@@ -308,13 +336,7 @@ def queue_time(root, data, stall_name):
     calculate_btn.place(x=data.width // 2 + 115, y=data.height // 2 + 10, anchor=CENTER)
 
 
-def operating_hours(root, data, stall_name):
-    canvas = display_stall(root, data, stall_name)
-
-    # read operating hour
-    filename = stall_name + ' op'
-    info_list_op = get_info(filename)
-
-    # display operating hour
-    for i, word in enumerate(info_list_op):
-        canvas.create_text((data.width // 2, 410), text=word, anchor=CENTER, font='Arial 45', fill='white')
+def operating_hours(root, data):
+    canvas = display_stall(root, data)
+    canvas.create_text((data.width // 2, 410), text=str(data.current_stall.hours),
+                       anchor=CENTER, font='Arial 45', fill='white')

@@ -12,6 +12,7 @@ from Canteen_Info_Sys_GUI import *
 
 # main func that runs the whole app
 def main(width=1000, height=800):
+
     # creates a root obj and its canvas
     root = Tk()
     root.title('North Spine Canteen Information System')
@@ -23,7 +24,10 @@ def main(width=1000, height=800):
         pass
 
     data = Struct()
-    initialize(data)
+    error_message = initialize(data)
+    if error_message is not None:
+        error_page(error_message)
+        return
     data.width, data.height = width, height
 
     # draws the cover
