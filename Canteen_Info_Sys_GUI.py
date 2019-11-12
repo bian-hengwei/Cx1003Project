@@ -250,20 +250,7 @@ def menu(root, data, stall_name):
     # prints stalls menu
     x_base, y_base, margin = 220, 270, 50
     for i, word in enumerate(info_list):
-<<<<<<< HEAD
-        canvas.create_text((XBASE + 70, 250 + YBASE + i * DISTANCE), text=word, anchor=W, font='Bookman 30',
-                           fill='white')
-
-    # read dish price
-    filename = stall_name + ' d'
-    info_list_d = get_info(filename)[1]
-
-    # display dish price
-    for j, price in enumerate(info_list_d):
-        canvas.create_text((XBASE + 550, 250 + YBASE + j * DISTANCE), text=price, anchor=W, font='Bookman 30',
-=======
         canvas.create_text((x_base, y_base + i * margin), text=word, anchor=W, font='Bookman 30',
->>>>>>> 386450f83a351bb52186d173efdfd5c43bc02b33
                            fill='white')
 
 
