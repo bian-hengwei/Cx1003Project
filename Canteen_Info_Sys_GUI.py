@@ -18,6 +18,7 @@ from Canteen_Info_Sys import *
 # initializes data
 # images MUST be initialized in the main() function
 # which calls initialize(data) in the main file
+# Bryan
 def initialize(data):
 
     # opens the cover image
@@ -47,6 +48,7 @@ def initialize(data):
 
 
 # draws the cover
+# Bryan
 def cover(root, data):
 
     # clears the root
@@ -85,6 +87,7 @@ def cover(root, data):
 
 
 # draws change date buttons and drop-down lists on cover
+# Cheng
 def draw_change_date(root, canvas, data):
 
     # a constant for drop-down list
@@ -156,15 +159,20 @@ def draw_change_date(root, canvas, data):
 
 
 # changes current date
+# Bryan
 def change_date(root, data, new_time=('reset',)):
 
     # calls the change_date function of the time object
     # calls select_stall page
-    data.time.change_date(new_time)
+    error_message = data.time.change_date(new_time)
+    if error_message is not None:
+        error_page(error_message)
+        return
     select_stall(root, data)
 
 
 # pops up an error page
+# Bryan
 def error_page(error_message='Unexpected Error'):
 
     # creates a new pop up error window
@@ -176,6 +184,7 @@ def error_page(error_message='Unexpected Error'):
 
 
 # draws a canvas that shows the stalls list
+# Bryan
 def select_stall(root, data):
 
     # clears the root
@@ -235,6 +244,7 @@ def select_stall(root, data):
 
 
 # change data.current_stall
+# Cheng
 def go_to_stall(root, data, stall_name):
 
     # calls the current_stall method
@@ -245,6 +255,7 @@ def go_to_stall(root, data, stall_name):
 
 # display the basic stall window
 # called by specific stall functions
+# Cheng
 def display_stall(root, data):
 
     # clears the root
@@ -289,6 +300,7 @@ def display_stall(root, data):
 
 
 # display the menu of any specific stall
+# Cheng
 def menu(root, data):
 
     # draws the shared stall window
@@ -308,6 +320,7 @@ def menu(root, data):
 
 # allows calculation for queue time
 # takes in any user input and shows queue time
+# Cheng
 def queue_time(root, data):
 
     # draws the shared window
@@ -329,7 +342,7 @@ def queue_time(root, data):
 
             # check if the number is valid
             assert 0 <= queue < 100
-            waiting_time = str(int(queue // data.current_stall.queue))
+            waiting_time = str(int(queue * data.current_stall.queue))
 
             # create text to show the queuing time message
             show_var = 'Estimated queuing time is: ' + waiting_time + ' minutes'
@@ -373,6 +386,7 @@ def queue_time(root, data):
 
 
 # shows the operating hours of any stall
+# Cheng
 def operating_hours(root, data):
 
     # draws the window

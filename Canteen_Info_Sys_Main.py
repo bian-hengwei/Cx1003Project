@@ -5,6 +5,7 @@ FS1 Bian Hengwei
 FS1 Bryan Lim
 FS1 Cheng Yu Feng
 Main file that runs the whole app
+Written by Bryan Lim
 """
 
 # import GUI and runs

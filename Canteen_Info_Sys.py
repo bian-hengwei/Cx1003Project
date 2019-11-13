@@ -5,6 +5,7 @@ FS1 Bian Hengwei
 FS1 Bryan Lim
 FS1 Cheng Yu Feng
 Basic algorithms that reads connects data files to GUI
+Bian
 """
 
 # import python build-in time
@@ -108,7 +109,10 @@ class Time:
         self.year = new_time[2]
         self.hour = new_time[3]
         self.minute = new_time[4]
-        self.day_of_week = datetime(int(self.year), int(self.month), int(self.date)).weekday()
+        try:
+            self.day_of_week = datetime(int(self.year), int(self.month), int(self.date)).weekday()
+        except ValueError:
+            return 'Invalid Date'
 
 
 # class period that represents a time period
