@@ -5,7 +5,7 @@ FS1 Bian Hengwei
 FS1 Bryan Lim
 FS1 Cheng Yu Feng
 Basic algorithms that reads connects data files to GUI
-Bian
+Written by Bian Hengwei
 """
 
 # import python build-in time
