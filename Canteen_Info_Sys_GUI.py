@@ -109,7 +109,7 @@ def draw_change_date(root, canvas, data):
     month_drop_down_list.place(x=605 + margin, y=data.height // 2 - 7, width=margin, anchor=SW)
 
     # year drop-down list
-    years_list = [x for x in range(2000, 2030)]
+    years_list = [str(x) for x in range(2000, 2030)]
 
     year_variable = StringVar(root)
     year_variable.set(str(data.time)[12:16])  # default value
@@ -137,11 +137,15 @@ def draw_change_date(root, canvas, data):
 
     # get all the above drop-down list value
     def get_var():
+
+        # get values from StringVars
         date_str = date_variable.get()
         month_str = month_variable.get()
         year_str = year_variable.get()
         hour_str = hour_variable.get()
         minute_str = minute_variable.get()
+
+        # call change_date wrapper with the user inputs
         new_time = date_str, month_str, year_str, hour_str, minute_str
         change_date(root, data, new_time)
 
@@ -210,7 +214,7 @@ def select_stall(root, data):
     # builds the buttons
     # initialize button constants
     margin_height = data.height // (stalls_count * 2 + 1)
-    button_height = margin_height * 2
+    button_height = min(margin_height * 2, 400)
     margin_width = data.width // 7
     button_width = margin_width * 2
 
@@ -346,7 +350,9 @@ def queue_time(root, data):
 
     # show_queue_time wrapper
     def show_queue_time_wrapper(event):
-        if event.keysym.lower() == 'return':
+
+        # show queue time if 'Return' is pressed
+        if event.keysym == 'Return':
             show_queue_time()
 
     # asks for user input
