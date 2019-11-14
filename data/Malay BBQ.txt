@@ -1,4 +1,4 @@
-Mon,Tue,Wed,Thu,Fri,Sat|08:30-21:30
+Mon,Tue,Wed,Thu,Fri|08:30-21:30
 2
 Mee Rebus&$2.80&ALL
 Mee Siam&$2.80&ALL

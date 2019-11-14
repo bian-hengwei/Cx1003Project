@@ -121,7 +121,7 @@ def draw_change_date(root, canvas, data):
     year_drop_down_list.place(x=605 + 2 * margin, y=data.height // 2 - 7, width=margin + 15, anchor=SW)
 
     # hour drop-down list
-    hours_list = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'] + [str(x) for x in range(10, 24)]
+    hours_list = ['0' + str(x) for x in range(10)] + [str(x) for x in range(10, 24)]
 
     hour_variable = StringVar(root)
     hour_variable.set(str(data.time)[18:20])  # default value
@@ -217,7 +217,7 @@ def select_stall(root, data):
     # check if no stall is open
     # show message and stop drawing this frame
     if stalls_count == 0:
-        canvas.create_text(data.width // 2, data.height // 2, text='Canteen Closed', font='Bookman 50', fill='white')
+        canvas.create_text(data.width // 2, data.height // 2, text='Canteen Closed', font='Arial 50', fill='white')
         return
 
     # builds the buttons
@@ -312,9 +312,9 @@ def menu(root, data):
     for dish in data.current_stall.menu:
         if data.time in data.current_stall.menu[dish][1]:
             # prints dish name and price separately
-            canvas.create_text(x_base, y_base + counter * margin, text=dish, anchor=W, font='Bookman 30', fill='white')
+            canvas.create_text(x_base, y_base + counter * margin, text=dish, anchor=W, font='Arial 30', fill='white')
             canvas.create_text(data.width - x_base, y_base + counter * margin, text=data.current_stall.menu[dish][0],
-                               anchor=W, font='Bookman 30', fill='white')
+                               anchor=W, font='Arial 30', fill='white')
             counter += 1
 
 
