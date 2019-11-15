@@ -27,7 +27,7 @@ def initialize(data):
     # check if list of stalls name is available
     data.stalls_list = get_stalls()
     if isinstance(data.stalls_list, str):
-        return data.stalls_list
+        error_page(data.stalls_list)
 
     # try to initialize all backgrounds
     data.backgrounds = []
